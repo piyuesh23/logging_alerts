@@ -2,7 +2,7 @@ name: Watchdog Triggers
 type: module
 description: 'Provides Trigger and Actions integration to watchdog events.'
 package: Logging and alerts
-configure: watchdog_triggers.admin
+configure: system.admin_config_system
 dependencies:
 #todo will be added later
 #  - trigger
