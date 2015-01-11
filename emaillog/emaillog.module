@@ -10,32 +10,17 @@
  * @Author: Maciej Zgadzaj http://zgadzaj.com (versions x.x-2.x)
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements hook_help().
  */
-function emaillog_help($path, $arg) {
-  switch ($path) {
-    case 'admin/help#emaillog':
+function emaillog_help($route_name, RouteMatchInterface $arg) {
+  switch ($route_name) {
+    case 'help.page.emaillog':
       return '<p>' . t('Sends logs and alerts to email addresses, with different severity going to different emails.') . '</p>';
-    case 'admin/reports/dblog':
+    case 'help.page.dblog':
       return '<p>' . t('Sends logs and alerts to email addresses, with different severity going to different emails.') . '</p>';
   }
-}
-
-/**
- * Implements hook_menu().
- */
-function emaillog_menu() {
-  $items['admin/config/system/emaillog'] = array(
-    'title'             => 'Email logging and alerts',
-    'description'       => 'Settings for logging and alerts to email addresses.',
-    'page callback'     => 'drupal_get_form',
-    'page arguments'    => array('emaillog_admin_settings'),
-    'access arguments'  => array('administer site configuration'),
-    'type'              => MENU_NORMAL_ITEM,
-    'file'              => 'emaillog.admin.inc',
-  );
-  return $items;
 }
 
 /**
@@ -47,10 +32,6 @@ function emaillog_theme() {
       'render element' => 'elements',
       'template' => 'emaillog',
       'variables' => array('log' => NULL),
-    ),
-    'emaillog_admin_settings' => array(
-      'render element' => 'form',
-      'file' => 'emaillog.admin.inc',
     ),
   );
 }
