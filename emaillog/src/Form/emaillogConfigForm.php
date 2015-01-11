@@ -9,13 +9,13 @@ namespace Drupal\emaillog\Form;
 
 use Drupal\Component\Utility\String;
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\Request;
 
-class emaillogConfigForm extends ConfigFormBase {
+class emaillogConfigForm extends FormBase {
   public function getFormId() {
     return 'email_log_config_form';
   }
@@ -123,16 +123,87 @@ class emaillogConfigForm extends ConfigFormBase {
       '#default_value'  => $this->config('emaillog.settings')->get('emaillog_legacy_subject'),
     );
 
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Save Configuration'
+    );
+
     $form['#theme'] = 'emaillog_admin_settings';
+
     return $form;
-//    return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * Validates admin settings form.
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $userInputValues = $form_state->getUserInput();
+
+    if ($userInputValues['emaillog_max_similar_emails'] && !$userInputValues['emaillog_max_similarity_level']) {
+      $form_state->setErrorByName('emaillog_max_similarity_level', $this->t('You need to provide value for %field1 field when specifying %field2.', array(
+        '%field1' => 'Maximum allowed similarity level between consecutive email alerts',
+        '%field2' => 'Maximum number of allowed consecutive similar emails',
+      )));
+    }
+    if ($userInputValues['emaillog_max_similarity_level'] && !$userInputValues['emaillog_max_similar_emails']) {
+      $form_state->setErrorByName('emaillog_max_similar_emails', $this->t('You need to provide value for %field1 field when specifying %field2.', array(
+        '%field1' => 'Maximum number of allowed consecutive similar emails',
+        '%field2' => 'Maximum allowed similarity level between consecutive email alerts',
+      )));
+    }
+    if ($userInputValues['emaillog_max_consecutive_timespan'] && !$userInputValues['emaillog_max_similar_emails']) {
+      $form_state->setErrorByName('emaillog_max_similar_emails', $this->t('You need to provide value for %field1 field when specifying %field2.', array(
+        '%field1' => 'Maximum number of allowed consecutive similar emails',
+        '%field2' => 'Email alerts should be considered "consecutive" if sent within',
+      )));
+    }
+    if ($userInputValues['emaillog_max_consecutive_timespan'] && !$userInputValues['emaillog_max_similarity_level']) {
+      $form_state->setErrorByName('emaillog_max_similarity_level', $this->t('You need to provide value for %field1 field when specifying %field2.', array(
+        '%field1' => 'Maximum allowed similarity level between consecutive email alerts',
+        '%field2' => 'Email alerts should be considered "consecutive" if sent within',
+      )));
+    }
+    if ($userInputValues['emaillog_max_similarity_level']) {
+      if (!is_numeric($userInputValues['emaillog_max_similarity_level'])) {
+        $form_state->setErrorByName('emaillog_max_similarity_level', $this->t('Value of %field cannot contain any non-numeric characters.', array(
+          '%field' => 'Maximum allowed similarity level between consecutive email alerts',
+        )));
+      }
+      if ($userInputValues['emaillog_max_similarity_level'] < 0 || $userInputValues['emaillog_max_similarity_level'] > 1) {
+        $form_state->setErrorByName('emaillog_max_similarity_level', $this->t('Value of %field needs to be in [0-1] range.', array(
+          '%field' => 'Maximum allowed similarity level between consecutive email alerts',
+        )));
+      }
+    }
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $userInputValues = $form_state->getUserInput();
     $config = $this->configFactory->get('emaillog.settings');
 
+    $severity_levels = RfcLogLevel::getLevels();
+
+    $debug_info = array();
+    foreach (array_keys($severity_levels) as $level_id) {
+      foreach (array_keys(_emaillog_get_debug_info_callbacks()) as $variable_id) {
+        if (!empty($userInputValues['debug_info'][$level_id][$variable_id])) {
+          $debug_info[$level_id][$variable_id] = 1;
+        }
+      }
+    }
+
+
+    foreach (array_keys($severity_levels) as $level_id) {
+      $config->set('emaillog_' . $level_id, $userInputValues['emaillog_' . $level_id]);
+    }
+
+    $config->set('emaillog_backtrace_replace_args', $userInputValues['debug_info']['emaillog_backtrace_replace_args']);
+    $config->set('emaillog_debug_info', $debug_info);
+    $config->set('emaillog_max_similar_emails', $userInputValues['emaillog_max_similar_emails']);
+    $config->set('emaillog_max_consecutive_timespan', $userInputValues['emaillog_max_consecutive_timespan']);
+    $config->set('emaillog_max_similarity_level', $userInputValues['emaillog_max_similarity_level']);
+    $config->set('emaillog_legacy_subject', $userInputValues['emaillog_legacy_subject']);
+//    unset($form_state['values']['debug_info']);
     $config->save();
-    parent::submitForm($form, $form_state);
   }
 }
