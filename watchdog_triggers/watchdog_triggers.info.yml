@@ -1,0 +1,15 @@
+name: Watchdog Triggers
+type: module
+description: 'Provides Trigger and Actions integration to watchdog events.'
+package: Logging and alerts
+configure: watchdog_triggers.admin
+dependencies:
+#todo will be added later
+#  - trigger
+
+
+
+# Information added by Drupal.org packaging script on 2015-01-11
+version: '8.x-1.x-dev'
+core: '8.x'
+project: 'logging_alerts'
