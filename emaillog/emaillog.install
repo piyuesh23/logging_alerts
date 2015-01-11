@@ -10,6 +10,5 @@
  * Deletes all emaillog variables and clears variable cache.
  */
 function emaillog_uninstall() {
-  db_query("DELETE FROM {variable} WHERE name LIKE 'emaillog_%'");
-  cache_clear_all('variables', 'cache');
+  $config_social_stats = \Drupal::config('emaillog')->delete();
 }
