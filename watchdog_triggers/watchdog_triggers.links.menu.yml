@@ -1,0 +1,6 @@
+watchdog_triggers.watchdog_main:
+  title: 'Watchdog triggers'
+  description: 'Configure watchdog triggers settings'
+  route_name: watchdog_triggers.watchdog_main
+  weight: 11
+  parent: system.admin_config_system

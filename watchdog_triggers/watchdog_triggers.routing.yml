@@ -1,0 +1,7 @@
+watchdog_triggers.watchdog_main:
+  path: '/admin/config/system/watchdog_triggers'
+  defaults:
+    _form: '\Drupal\watchdog_triggers\Form\LoggingAlertsForm'
+    _title: 'Configure watchdog triggers settings'
+  requirements:
+    _permission: 'administer watchdog triggers'
