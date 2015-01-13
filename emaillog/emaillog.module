@@ -115,7 +115,6 @@ function emaillog_mail($key, &$message, $params) {
     );
 
     $message['body'][] = render($emaillog_theme_element);
-    dsm($message);
   }
 }
 

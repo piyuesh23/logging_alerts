@@ -11,6 +11,6 @@ Message:
 
 {{ log.message }}
 
-{% for name, value in log.debug_info %}
-{{ name }} => {{ value }}
+{% for name, info in log.debug_info %}
+    {{ name }} => {{ dump(info) }}
 {% endfor %}

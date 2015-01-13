@@ -100,10 +100,11 @@ class EmailLogger implements LoggerInterface {
     // Add additional debug info (PHP predefined variables, debug backtrace etc.)
     $log['debug_info'] = array();
     $debug_info_settings = $this->config->get('emaillog_debug_info');
+
     foreach (_emaillog_get_debug_info_callbacks() as $debug_info_key => $debug_info_callback) {
-//      if (isset($debug_info_settings[$log['severity']][$debug_info_key]) && $debug_info_settings[$log['severity']][$debug_info_key]) {
-//        eval('$log[\'debug_info\'][\'' . $debug_info_callback . '\'] = ' . $debug_info_callback . ';');
-//      }
+      if (isset($debug_info_settings[$level][$debug_info_key]) && $debug_info_settings[$level][$debug_info_key]) {
+        eval('$log[\'debug_info\'][\'' . $debug_info_callback . '\'] = ' . $debug_info_callback . ';');
+      }
     }
     \Drupal::moduleHandler()->alter('emaillog_debug_info', $log['debug_info']);
 
@@ -124,7 +125,8 @@ class EmailLogger implements LoggerInterface {
     $params = array(
       'message' => $message,
       'severity' => $level,
-      'variables' => $context
+      'variables' => $context,
+      'debug_info' => $log['debug_info']
     );
 
     \Drupal::service('plugin.manager.mail')->mail('emaillog', 'alert', $to, $language, $params, $site_mail);
