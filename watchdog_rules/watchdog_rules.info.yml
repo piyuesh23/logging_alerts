@@ -1,0 +1,14 @@
+name: Watchdog Rules
+type: module
+description: Provides Rules integration to watchdog events.
+package: Logging and alerts
+core: 8.x
+dependencies: 
+	-rules
+
+ # Information added by drupal.org packaging script on 2013-06-19
+version: "8.x-1.x"
+core: "8.x"
+project: "logging_alerts"
+datestamp: "1371630053"
+
