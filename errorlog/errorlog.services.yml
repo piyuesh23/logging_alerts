@@ -1,5 +1,5 @@
 services:
-  logger.mylog:
+  logger.errorlog:
     class: Drupal\errorlog\ErrorLogFormatter\ErrorLogMessageFormatter
     tags:
       - { name: logger }
