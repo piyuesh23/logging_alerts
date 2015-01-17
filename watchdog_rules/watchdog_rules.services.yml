@@ -1,6 +1,6 @@
 services:
   logger.watchdog_rules:
-    class: Drupal\watchdog_rules\WatchdogRulesEvents\WatchdogRulesEvents
+    class: Drupal\watchdog_rules\Logger\WatchdogRulesEvents
     tags:
       - { name: logger }
 

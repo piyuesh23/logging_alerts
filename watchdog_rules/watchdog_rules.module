@@ -8,7 +8,9 @@
 
 /**
  * Implements hook_watchdog().
+ * @todo: need to figure it out rules_invoke_event() Rules D8 API
  */
+/*
 function watchdog_rules_watchdog($watchdog_message) {
   // Make sure we do not provide NULL values, as Rules module doesn't like them.
   // @see http://drupal.org/node/1497534
@@ -17,7 +19,7 @@ function watchdog_rules_watchdog($watchdog_message) {
       $watchdog_message[$key] = '';
     }
   }
-  rules_invoke_event('watchdog_rules', 
+  rules_invoke_event('watchdog_rules',
     $watchdog_message['user'],
     $watchdog_message['type'],
     $watchdog_message['request_uri'],
@@ -29,6 +31,7 @@ function watchdog_rules_watchdog($watchdog_message) {
     $watchdog_message['message']
   );
 }
+*/
 
 /**
  * Implements hook_token_info().
@@ -40,40 +43,40 @@ function watchdog_rules_token_info() {
     'needs-data' => 'watchdog',
   );
   $watchdog['type'] = array(
-    'name' => t("Watchdog type"), 
+    'name' => t("Watchdog type"),
     'description' => t("The type of the watchdog event."),
   );
   $watchdog['request_uri'] = array(
-    'name' => t("Watchdog request URI"), 
+    'name' => t("Watchdog request URI"),
     'description' => t('The request URI for the page the event happened in.'),
   );
   $watchdog['referer'] = array(
-    'name' => t("Watchdog referer"), 
+    'name' => t("Watchdog referer"),
     'description' => t('The page that referred the user to the page where the event occurred.'),
   );
   $watchdog['ip'] = array(
-    'name' => t("Watchdog ip"), 
+    'name' => t("Watchdog ip"),
     'description' => t('The IP address where the request for the page came from.'),
   );
   $watchdog['timestamp'] = array(
-    'name' => t("Watchdog timestamp"), 
+    'name' => t("Watchdog timestamp"),
     'description' => t('The UNIX timetamp of the date/time the event occurred.'),
   );
   $watchdog['severity'] = array(
-    'name' => t("Watchdog severity"), 
+    'name' => t("Watchdog severity"),
     'description' => t('The degree of severity of the event.'),
   );
   $watchdog['link'] = array(
-    'name' => t("Watchdog link"), 
+    'name' => t("Watchdog link"),
     'description' => t('An informational link provided by the module calling watchdog.'),
   );
   $watchdog['message'] = array(
-    'name' => t("Watchdog message"), 
+    'name' => t("Watchdog message"),
     'description' => t('The text of the message to be logged.'),
   );
 
   return array(
-    'types' => array('watchdog' => $type), 
+    'types' => array('watchdog' => $type),
     'tokens' => array('watchdog' => $watchdog),
   );
 }
