@@ -1,5 +1,0 @@
-emaillog.config_menu:
-  title: 'Email logging and alerts'
-  description: 'Settings for logging and alerts to email addresses.'
-  route_name: emaillog.config
-  parent: system.admin
