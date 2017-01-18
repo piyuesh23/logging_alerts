@@ -9,8 +9,5 @@
  * Implements hook_uninstall().
  */
 function errorlog_uninstall() {
-  $severities = array_keys(watchdog_severity_levels());
-  foreach ($severities as $severity) {
-    variable_del('errorlog_' . $severity);
-  }
+  \Drupal::configFactory()->getEditable('errorlog.settings')->delete();
 }

@@ -11,7 +11,6 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\Entity\NodeType;
 use Drupal\Core\Logger\RfcLogLevel;
 
 /**
@@ -30,28 +29,29 @@ function errorlog_help($route_name, RouteMatchInterface $route_match) {
 function errorlog_theme() {
   return array(
     'errorlog_format' => array(
-      'arguments' => array('log_msg' => NULL),
-    ),
+      'variables' => array('log' => NULL)
+    )
   );
 }
 
 /**
- * Themes error log message.
+ * @param $variables
  */
-function theme_errorlog_format($log_msg = array()) {
+function template_preprocess_errorlog_format(&$variables) {
   global $base_root;
   $config = \Drupal::config('system.site');
-
+  $log_data = $variables['log'];
+  $log_context = $variables['log']['context'];
   $severity_list = RfcLogLevel::getLevels();
   $message  = $config->get('name') ?: 'Drupal';
   $message .= '|' . $base_root;
-  $message .= '|severity=' . $severity_list[$log_msg['severity']];
-  $message .= '|type=' . $log_msg['type'];
-  $message .= '|ip=' . $log_msg['ip'];
-  $message .= '|uri=' . $log_msg['request_uri'];
-  $message .= '|referer=' . $log_msg['referer'];
-  $message .= '|uid=' . $log_msg['user']->uid;
-  $message .= '|link=' . strip_tags($log_msg['link']);
-  $message .= '|message=' . strip_tags(t($log_msg['message'], $log_msg['variables']));
-  return $message;
+  $message .= '|severity=' . $severity_list[$log_data['level']];
+  $message .= '|type=' . $log_data['type'];
+  $message .= '|ip=' . $log_context['ip'];
+  $message .= '|uri=' . $log_context['request_uri'];
+  $message .= '|referer=' . $log_context['referer'];
+  $message .= '|uid=' . $log_context['uid'];
+  $message .= '|link=' . strip_tags($log_context['link']);
+  $message .= '|message=' . strip_tags(t($log_data['message'], $log_context));
+  $variables['message'] = $message;
 }
