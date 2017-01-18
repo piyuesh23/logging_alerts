@@ -40,14 +40,14 @@ class ErrorlogConfiguration extends ConfigFormBase {
     $config = $this->config('errorlog.settings');
     $form['errorlog'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Error logging for each severity level.'),
-      '#description' => t('Check each severity level you want to get logged to the error log.'),
+      '#title' => $this->t('Error logging for each severity level.'),
+      '#description' => $this->t('Check each severity level you want to get logged to the error log.'),
     );
     foreach (RfcLogLevel::getLevels() as $severity => $description) {
       $key = 'errorlog_' . $severity;
       $form['errorlog'][$key] = array(
         '#type' => 'checkbox',
-        '#title' => t('Severity: @description', array('@description' => Unicode::ucfirst($description->render()))),
+        '#title' => $this->t('Severity: @description', array('@description' => Unicode::ucfirst($description->render()))),
         '#default_value' => $config->get($key) ?: FALSE,
       );
     }
