@@ -4,11 +4,3 @@
  * @file
  * Install, update and uninstall functions for the emaillog module.
  */
-
-/**
- * Implements hook_uninstall().
- * Deletes all emaillog variables and clears variable cache.
- */
-function emaillog_uninstall() {
-  $config_social_stats = \Drupal::config('emaillog')->delete();
-}

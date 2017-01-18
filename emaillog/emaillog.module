@@ -86,7 +86,7 @@ function theme_emaillog_admin_settings($variables) {
   );
 
   // Render and return all remaining elements.
-  return drupal_render_children($form);
+  return \Drupal::service('renderer')->render($form);
 }
 
 /**
