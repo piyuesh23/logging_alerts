@@ -19,7 +19,7 @@ use Drupal\Core\Logger\RfcLogLevel;
 function errorlog_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.errorlog':
-      return '<p>' . t('Sends logs and alerts to the web server\'s error log.') . '</p>';
+      return '<p>' . t("Sends logs and alerts to the web server's error log.") . '</p>';
   }
 }
 
@@ -29,7 +29,7 @@ function errorlog_help($route_name, RouteMatchInterface $route_match) {
 function errorlog_theme() {
   return array(
     'errorlog_format' => array(
-      'variables' => array('log' => NULL)
+      'variables' => array('log' => NULL),
     )
   );
 }
@@ -46,7 +46,7 @@ function template_preprocess_errorlog_format(&$variables) {
   $message  = $config->get('name') ?: 'Drupal';
   $message .= '|' . $base_root;
   $message .= '|severity=' . $severity_list[$log_data['level']];
-  $message .= '|type=' . $log_data['type'];
+  $message .= '|type=' . $log_context['channel'];
   $message .= '|ip=' . $log_context['ip'];
   $message .= '|uri=' . $log_context['request_uri'];
   $message .= '|referer=' . $log_context['referer'];
